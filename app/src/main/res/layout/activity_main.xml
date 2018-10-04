@@ -37,21 +37,29 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:onClick="onClickRun11"
-                android:text="Test 1" />
+                android:text="Simple JNI Test" />
 
             <Button
                 android:id="@+id/button12"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:onClick="onClickRun12"
-                android:text="Test 2" />
+                android:text="JNI mirror Test" />
 
             <Button
                 android:id="@+id/button13"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:onClick="onClickRun13"
-                android:text="Test 3" />
+                android:text="image nomalization via JNI" />
+
+            <Button
+                android:id="@+id/button14"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="onClickRun14"
+                android:text="image nomalization via Java" />
+
         </LinearLayout>
 
     </LinearLayout>

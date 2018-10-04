@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void onClickRun11(View v) {
         new ProfTest(this).utest4jni1();
     }
@@ -38,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
         new ProfTest(this).utest4jni3();
     }
 
+    public void onClickRun14(View v) {
+        new ProfTest(this).utest4jni4();
+    }
+
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-
-//    public native String passingDataToJni(double[] doubleLeftArray, double[] doubleRightArray, int intValue, String stringValue);
-
 
 }

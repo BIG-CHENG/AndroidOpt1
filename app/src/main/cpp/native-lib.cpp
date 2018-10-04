@@ -1,3 +1,20 @@
+// Copyright 2018 BIG CHENG (bigcheng.asus@gmail.com). All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ==============================================================================
+
+// BIG CHENG, 2018/08/01, init, jni for optimization
+
 #include <jni.h>
 #include <string>
 #include <android/bitmap.h>
@@ -12,31 +29,6 @@ Java_tw_game_ai_prof1_MainActivity_stringFromJNI(
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }
-
-/*
-extern "C" JNIEXPORT jstring
-
-JNICALL
-Java_tw_game_ai_prof1_MainActivity_passingDataToJni(JNIEnv *env, jobject instance,
-                                                 jdoubleArray doubleLeftArray_,
-                                                 jdoubleArray doubleRightArray_,
-                                                 jint intValue, jstring stringValue_) {
-
-    jdouble *doubleLeftArray = env->GetDoubleArrayElements(doubleLeftArray_, NULL);
-    jdouble *doubleRightArray = env->GetDoubleArrayElements(doubleRightArray_, NULL);
-
-    const jchar *stringValue = env->GetStringChars(stringValue_, 0);
-    const char *stringValueUTF = env->GetStringUTFChars(stringValue_, 0);
-
-
-    env->ReleaseDoubleArrayElements(doubleLeftArray_, doubleLeftArray, 0);
-    env->ReleaseDoubleArrayElements(doubleRightArray_, doubleRightArray, 0);
-    env->ReleaseStringUTFChars(stringValue_, stringValueUTF);
-    env->ReleaseStringChars(stringValue_, stringValue);
-
-    return stringValue_;
-}
-*/
 
 inline int rgba2int1(uint8_t R, uint8_t G, uint8_t B, uint8_t A)
 {
@@ -174,9 +166,13 @@ Java_tw_game_ai_prof1_ProfTest_bmp2faJNI(
     for (int i=0; i<n_x; i++) {
         for (int j=0; j<n_y; j++) {
             uint32_t val = rgba[pos];
-            results[pos * 3 + 0] = (float) ((val >> 16) & 0xFF);
+            // c is little end-ian
+//            results[pos * 3 + 0] = (float) ((val >> 16) & 0xFF);
+//            results[pos * 3 + 1] = (float) ((val >> 8) & 0xFF);
+//            results[pos * 3 + 2] = (float) (val & 0xFF);
+            results[pos * 3 + 0] = (float) (val & 0xFF);
             results[pos * 3 + 1] = (float) ((val >> 8) & 0xFF);
-            results[pos * 3 + 2] = (float) (val & 0xFF);
+            results[pos * 3 + 2] = (float) ((val >> 16) & 0xFF);
             //SetFloatArrayRegion
             pos++;
         }
@@ -191,42 +187,3 @@ Java_tw_game_ai_prof1_ProfTest_bmp2faJNI(
     return ret;
 }
 
-/*
-float[] floatValues = new float[DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * 3];
-
-private void convertBitmapToByteBuffer(Bitmap bitmap) {
-    if (imgData == null) {
-        return;
-    }
-    imgData.rewind();
-
-    bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-    // Convert the image to floating point.
-    int pixel = 0;
-    long startTime = SystemClock.uptimeMillis();
-    for (int i = 0; i < DIM_IMG_SIZE_X; ++i) {
-        for (int j = 0; j < DIM_IMG_SIZE_Y; ++j) {
-            final int val = intValues[pixel];
-            floatValues[pixel * 3 + 0] = (float) ((val >> 16) & 0xFF);
-            floatValues[pixel * 3 + 1] = (float) ((val >> 8) & 0xFF);
-            floatValues[pixel * 3 + 2] = (float) (val & 0xFF);
-            pixel++;
-        }
-    }
-
-    float[] floatValues2 = prewhiten(floatValues);
-    //float[] floatValues2 = floatValues;
-    pixel = 0;
-    for (int i = 0; i < DIM_IMG_SIZE_X; ++i) {
-        for (int j = 0; j < DIM_IMG_SIZE_Y; ++j) {
-            final int val = intValues[pixel];
-            imgData.putFloat(floatValues2[pixel * 3 + 0]);
-            imgData.putFloat(floatValues2[pixel * 3 + 1]);
-            imgData.putFloat(floatValues2[pixel * 3 + 2]);
-            pixel++;
-        }
-    }
-    long endTime = SystemClock.uptimeMillis();
-    Log.d(TAG, "Timecost to put values into ByteBuffer: " + Long.toString(endTime - startTime));
-}
- */
